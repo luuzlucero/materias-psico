@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Curricular Psicología UNC</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+    h1, h2 { text-align: center; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .materia { background: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; transition: 0.3s; cursor: pointer; }
+    .materia:hover { background: #eef; }
+    .detalle { display: none; margin-top: 10px; font-size: 0.9em; color: #333; }
+    .activo .detalle { display: block; }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular - Lic. en Psicología (UNC)</h1>
+  <h2>Ciclo Básico</h2>
+  <div class="grid" id="cicloBasico"></div>
+
+  <h2>Ciclo Superior</h2>
+  <div class="grid" id="cicloSuperior"></div>
+
+  <script>
+    const materias = [
+      {
+        nombre: "Introducción a los Estudios Universitarios en Psicología",
+        ciclo: "basico",
+        correlativas: [],
+        horas: 100
+      },
+      {
+        nombre: "Problemas Epistemológicos de la Psicología",
+        ciclo: "basico",
+        correlativas: ["Introducción a los Estudios Universitarios en Psicología"],
+        horas: 100
+      },
+      {
+        nombre: "Psicología del Desarrollo Infantil",
+        ciclo: "basico",
+        correlativas: ["Introducción a los Estudios Universitarios en Psicología", "Introducción a la Psicología"],
+        horas: 100
+      },
+      {
+        nombre: "Psicología de las Adolescencias y Juventudes",
+        ciclo: "superior",
+        correlativas: ["Psicología del Desarrollo Infantil"],
+        horas: 120
+      },
+      {
+        nombre: "Psicología Clínica",
+        ciclo: "superior",
+        correlativas: ["Sistemas Psicológicos Contemporáneos"],
+        horas: 130
+      },
+      // Agregar más materias aquí...
+    ];
+
+    function crearMalla(cicloId, ciclo) {
+      const contenedor = document.getElementById(cicloId);
+      const materiasFiltradas = materias.filter(m => m.ciclo === ciclo);
+
+      materiasFiltradas.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'materia';
+        div.innerHTML = `
+          <strong>${m.nombre}</strong>
+          <div class="detalle">
+            <p><strong>Horas:</strong> ${m.horas}</p>
+            <p><strong>Correlativas:</strong> ${m.correlativas.length ? m.correlativas.join(', ') : 'Ninguna'}</p>
+          </div>
+        `;
+        div.onclick = () => div.classList.toggle('activo');
+        contenedor.appendChild(div);
+      });
+    }
+
+    crearMalla('cicloBasico', 'basico');
+    crearMalla('cicloSuperior', 'superior');
+  </script>
+</body>
+</html>
+subiendo malla base
