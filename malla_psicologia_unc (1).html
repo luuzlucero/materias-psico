@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Curricular Psicología UNC</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+    h1, h2 { text-align: center; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .materia { background: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 15px; transition: 0.3s; cursor: pointer; }
+    .materia:hover { background: #eef; }
+    .detalle { display: none; margin-top: 10px; font-size: 0.9em; color: #333; }
+    .activo .detalle { display: block; }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular - Lic. en Psicología (UNC)</h1>
+  <h2>Ciclo Básico</h2>
+  <div class="grid" id="cicloBasico"></div>
+
+  <h2>Ciclo Superior</h2>
+  <div class="grid" id="cicloSuperior"></div>
+
+  <script>
+    const materias = [
+      // CICLO BÁSICO
+      { nombre: "Introducción a los Estudios Universitarios en Psicología", ciclo: "basico", correlativas: [], horas: 100 },
+      { nombre: "Problemas Epistemológicos de la Psicología", ciclo: "basico", correlativas: ["Introducción a los Estudios Universitarios en Psicología"], horas: 100 },
+      { nombre: "Introducción a la Psicología", ciclo: "basico", correlativas: ["Introducción a los Estudios Universitarios en Psicología"], horas: 50 },
+      { nombre: "Psicología del Desarrollo Infantil", ciclo: "basico", correlativas: ["Introducción a los Estudios Universitarios en Psicología", "Introducción a la Psicología"], horas: 100 },
+      { nombre: "Sistemas Psicológicos Contemporáneos", ciclo: "basico", correlativas: ["Introducción a los Estudios Universitarios en Psicología"], horas: 100 },
+      { nombre: "Psicoestadística (descriptiva e inferencial)", ciclo: "basico", correlativas: ["Introducción a los Estudios Universitarios en Psicología"], horas: 100 },
+      { nombre: "Biología Evolutiva Humana", ciclo: "basico", correlativas: ["Introducción a los Estudios Universitarios en Psicología"], horas: 50 },
+      { nombre: "Neurofisiología y Psicofisiología", ciclo: "basico", correlativas: ["Biología Evolutiva Humana"], horas: 100 },
+      { nombre: "Psicoanálisis", ciclo: "basico", correlativas: ["Introducción a los Estudios Universitarios en Psicología"], horas: 100 },
+      { nombre: "Técnicas Psicométricas", ciclo: "basico", correlativas: ["Psicoestadística (descriptiva e inferencial)"], horas: 100 },
+      { nombre: "Antropología Cultural, Contemporánea y Latinoamericana", ciclo: "basico", correlativas: ["Introducción a los Estudios Universitarios en Psicología"], horas: 100 },
+
+      // CICLO SUPERIOR
+      { nombre: "Psicología de las Adolescencias y Juventudes", ciclo: "superior", correlativas: ["Psicología del Desarrollo Infantil"], horas: 120 },
+      { nombre: "Psicología Sanitaria en Salud Pública/Salud Mental", ciclo: "superior", correlativas: ["Antropología Cultural, Contemporánea y Latinoamericana"], horas: 130 },
+      { nombre: "Psicología Social", ciclo: "superior", correlativas: ["Problemas Epistemológicos de la Psicología", "Sistemas Psicológicos Contemporáneos", "Antropología Cultural, Contemporánea y Latinoamericana"], horas: 130 },
+      { nombre: "Métodos de Investigación en Psicología", ciclo: "superior", correlativas: ["Técnicas Psicométricas"], horas: 120 },
+      { nombre: "Perspectivas Psicológicas en Educación", ciclo: "superior", correlativas: ["Problemas Epistemológicos de la Psicología", "Psicoanálisis"], horas: 130 },
+      { nombre: "Psicopatología", ciclo: "superior", correlativas: ["Psicoanálisis"], horas: 120 },
+      { nombre: "Psicobiología Experimental", ciclo: "superior", correlativas: ["Neurofisiología y Psicofisiología", "Psicoestadística (descriptiva e inferencial)", "Métodos de Investigación en Psicología"], horas: 120 },
+      { nombre: "Psicología del Trabajo", ciclo: "superior", correlativas: ["Psicología Social"], horas: 130 },
+      { nombre: "Psicología Clínica", ciclo: "superior", correlativas: ["Sistemas Psicológicos Contemporáneos"], horas: 130 },
+      { nombre: "Técnicas Proyectivas", ciclo: "superior", correlativas: ["Psicopatología"], horas: 120 },
+      { nombre: "Psicología Criminológica", ciclo: "superior", correlativas: ["Antropología Cultural, Contemporánea y Latinoamericana"], horas: 150 },
+      { nombre: "Entrevista Psicológica", ciclo: "superior", correlativas: ["Psicopatología"], horas: 150 },
+      { nombre: "Deontología, Ética y Legislación Profesional", ciclo: "superior", correlativas: ["Perspectivas Psicológicas en Educación", "Psicología Clínica", "Psicología Criminológica", "Psicología Social", "Psicología Sanitaria en Salud Pública/Salud Mental"], horas: 60 },
+      { nombre: "Orientación Vocacional", ciclo: "superior", correlativas: ["Perspectivas Psicológicas en Educación", "Entrevista Psicológica"], horas: 130 }
+    ];
+
+    function crearMalla(cicloId, ciclo) {
+      const contenedor = document.getElementById(cicloId);
+      const materiasFiltradas = materias.filter(m => m.ciclo === ciclo);
+
+      materiasFiltradas.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'materia';
+        div.innerHTML = `
+          <strong>${m.nombre}</strong>
+          <div class="detalle">
+            <p><strong>Horas:</strong> ${m.horas}</p>
+            <p><strong>Correlativas:</strong> ${m.correlativas.length ? m.correlativas.join(', ') : 'Ninguna'}</p>
+          </div>
+        `;
+        div.onclick = () => div.classList.toggle('activo');
+        contenedor.appendChild(div);
+      });
+    }
+
+    crearMalla('cicloBasico', 'basico');
+    crearMalla('cicloSuperior', 'superior');
+  </script>
+</body>
+</html>
